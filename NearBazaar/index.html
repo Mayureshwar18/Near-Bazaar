@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1a5c2a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<title>NearBazaar — Shop Nearby, Save Easy</title>
+<!-- FAVICONS -->
+<link rel="icon" type="image/png" sizes="192x192" href="assets/android-chrome-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="assets/android-chrome-512x512.png">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Baloo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/customer.css">
+<link rel="stylesheet" href="css/shopkeeper.css">
+<link rel="stylesheet" href="css/driver.css">
+<style>
+@media (min-width:600px){
+  body{background:#e5e7eb;display:flex;align-items:flex-start;justify-content:center;min-height:100vh;}
+  .app-wrapper{max-width:430px;width:100%;min-height:100vh;box-shadow:0 0 60px rgba(0,0,0,.2);margin:0 auto;position:relative;}
+}
+.inv-item-row{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid #f3f4f6;background:white;}
+.inv-img{width:52px;height:52px;border-radius:10px;background:#f3f4f6;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;overflow:hidden;}
+.inv-info{flex:1;min-width:0;overflow:hidden;}
+.inv-name{font-size:13px;font-weight:700;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.inv-meta{font-size:11px;color:#6b7280;margin-top:2px;}
+.inv-actions{display:flex;flex-direction:column;gap:4px;flex-shrink:0;}
+.drv-order-card{background:white;border-radius:14px;padding:16px;margin:10px 20px;border:1.5px solid #e5e7eb;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.drv-order-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.drv-order-id{font-size:13px;font-weight:800;color:#111827;}
+.drv-order-dist{font-size:11px;font-weight:700;color:#1d4ed8;background:#dbeafe;padding:3px 8px;border-radius:8px;}
+.drv-route{display:flex;flex-direction:column;gap:6px;margin-bottom:10px;}
+.drv-route-item{display:flex;align-items:flex-start;gap:10px;}
+.drv-route-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:3px;}
+.drv-route-dot.pickup{background:#166534;}
+.drv-route-dot.drop{background:#991b1b;}
+.drv-route-line{width:2px;background:#e5e7eb;margin:0 4px;min-height:16px;}
+.drv-route-label{font-size:10px;font-weight:700;color:#9ca3af;text-transform:uppercase;}
+.drv-route-addr{font-size:12px;font-weight:600;color:#374151;}
+.drv-order-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.drv-meta-item{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:#6b7280;}
+.drv-order-earn{margin-left:auto;font-size:14px;font-weight:900;color:#166534;}
+.drv-order-actions{display:flex;gap:8px;margin-top:12px;}
+.drv-stats{display:flex;gap:1px;background:rgba(0,0,0,.1);}
+.drv-stat{flex:1;background:white;padding:12px 8px;text-align:center;}
+.drv-stat-val{font-size:20px;font-weight:900;}
+.drv-stat-val.blue{color:#1d4ed8;}.drv-stat-val.green{color:#166534;}.drv-stat-val.amber{color:#92400e;}
+.drv-stat-lbl{font-size:10px;color:#9ca3af;font-weight:600;margin-top:2px;}
+.drv-online-bar{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.12);border-radius:12px;padding:10px 14px;margin-top:10px;cursor:pointer;}
+.drv-online-text{flex:1;}.drv-online-label{font-size:12px;font-weight:700;color:white;}.drv-online-sub{font-size:11px;color:rgba(255,255,255,.6);margin-top:2px;}
+.drv-status-badge{font-size:11px;font-weight:800;padding:3px 10px;border-radius:10px;}
+.drv-status-badge.online{background:rgba(255,255,255,.25);color:white;}.drv-status-badge.offline{background:rgba(0,0,0,.2);color:rgba(255,255,255,.7);}
+.req-response-card{display:flex;align-items:center;gap:10px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:10px 12px;margin-bottom:8px;}
+.req-shop-name{font-size:13px;font-weight:700;color:#111827;}.req-quote{font-size:12px;font-weight:600;color:#166534;margin-top:2px;}
+.req-accept-btn{background:#166534;color:white;border:none;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:inherit;}
+/* Full-screen overlay modals */
+.nb-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:300;display:none;align-items:flex-end;justify-content:center;}
+.nb-overlay.open{display:flex;}
+.nb-sheet{background:white;border-radius:24px 24px 0 0;padding:24px 20px 40px;max-width:430px;width:100%;max-height:85vh;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.nb-sheet-handle{width:40px;height:4px;background:#e5e7eb;border-radius:2px;margin:0 auto 18px;}
+#screen-signup-success{background:linear-gradient(160deg,#1a5c2a,#166534);}
+</style>
+</head>
+<body>
+<div class="app-wrapper" id="app">
+
+  <!-- SPLASH -->
+  <div class="screen active" id="screen-splash">
+    <div class="splash-bg">
+      <div class="splash-orb orb1"></div><div class="splash-orb orb2"></div><div class="splash-orb orb3"></div>
+      <div class="splash-content">
+        <div class="splash-logo-wrap">
+          <img src="assets/logo.png" alt="NearBazaar" class="splash-logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="splash-logo-fallback" style="display:none"><span class="logo-nb">NB</span></div>
+        </div>
+        <h1 class="splash-title">Near<span>Bazaar</span></h1>
+        <p class="splash-tagline">Shop Nearby, Save Easy</p>
+        <div class="splash-loader"><div class="loader-bar"></div></div>
+      </div>
+      <div class="splash-footer"><p>Designed &amp; Developed by <strong>Mayureshwar</strong></p></div>
+    </div>
+  </div>
+
+  <!-- WELCOME -->
+  <div class="screen" id="screen-welcome">
+    <div class="welcome-bg"><div class="welcome-deco deco1"></div><div class="welcome-deco deco2"></div></div>
+    <div class="scroll-area welcome-scroll">
+      <div class="welcome-header">
+        <img src="assets/logo.png" alt="NearBazaar" class="welcome-logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="welcome-logo-fb" style="display:none"><span>NB</span></div>
+        <h1 class="welcome-title">Near<span>Bazaar</span></h1>
+        <p class="welcome-sub">Your neighbourhood's digital marketplace</p>
+        <div class="location-detect-bar" onclick="detectLocation()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+          <span id="welcome-location">Tap to detect location &#128204;</span>
+        </div>
+      </div>
+      <div class="role-section">
+        <p class="role-label">I am a —</p>
+        <div class="role-cards">
+          <div class="role-card-nb customer" onclick="selectRole('customer')">
+            <div class="role-icon-wrap"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <div class="role-info"><h3>Customer</h3><p>Browse shops, place orders &amp; get delivery</p></div>
+            <div class="role-arrow">&#10132;</div>
+          </div>
+          <div class="role-card-nb shopkeeper" onclick="selectRole('shopkeeper')">
+            <div class="role-icon-wrap"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+            <div class="role-info"><h3>Shopkeeper</h3><p>Manage your shop, inventory &amp; orders</p></div>
+            <div class="role-arrow">&#10132;</div>
+          </div>
+          <div class="role-card-nb driver" onclick="selectRole('delivery')">
+            <div class="role-icon-wrap"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+            <div class="role-info"><h3>Delivery Partner</h3><p>Deliver orders &amp; earn daily commissions</p></div>
+            <div class="role-arrow">&#10132;</div>
+          </div>
+        </div>
+      </div>
+      <div class="welcome-features">
+        <div class="feat-item"><div class="feat-icon">&#9679;</div><span>100% Local Shops</span></div>
+        <div class="feat-item"><div class="feat-icon">&#9679;</div><span>30-Min Delivery</span></div>
+        <div class="feat-item"><div class="feat-icon">&#9679;</div><span>Secure Payments</span></div>
+      </div>
+    </div>
+    <div class="welcome-footer-bar"><p>Designed &amp; Developed by <strong>Mayureshwar</strong> &nbsp;|&nbsp; v1.0</p></div>
+  </div>
+
+  <!-- AUTH -->
+  <div class="screen" id="screen-auth">
+    <div class="auth-header" id="auth-header">
+      <button class="back-btn-white" onclick="goTo('screen-welcome')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        Back
+      </button>
+      <div class="auth-role-badge" id="auth-role-badge">Customer</div>
+    </div>
+    <div class="scroll-area">
+      <div class="auth-body">
+        <div class="auth-logo-sm"><img src="assets/logo.png" alt="NB" onerror="this.style.display='none'"></div>
+        <h2 class="auth-title" id="auth-title">Welcome Back!</h2>
+        <p class="auth-sub" id="auth-sub">Sign in to continue</p>
+        <div class="auth-tabs">
+          <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Login</button>
+          <button class="auth-tab" id="tab-signup" onclick="switchAuthTab('signup')">Sign Up</button>
+        </div>
+        <button class="google-btn" onclick="signInWithGoogle()">
+          <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Continue with Google
+        </button>
+        <div class="auth-divider"><span>or</span></div>
+        <!-- Login -->
+        <div id="login-form">
+          <div class="form-group"><label>Email Address</label><input type="email" id="login-email" placeholder="you@example.com" autocomplete="email"></div>
+          <div class="form-group">
+            <label>Password</label>
+            <div class="input-pass-wrap">
+              <input type="password" id="login-pass" placeholder="Enter password" autocomplete="current-password">
+              <button class="pass-toggle" onclick="togglePass('login-pass',this)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+            </div>
+          </div>
+          <a href="#" class="forgot-pass" onclick="forgotPassword();return false;">Forgot Password?</a>
+          <button class="btn-auth" id="login-btn" onclick="loginWithEmail()">
+            <span>Login to NearBazaar</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </div>
+        <!-- Signup -->
+        <div id="signup-form" style="display:none">
+          <div class="form-group"><label>Full Name <span class="req">*</span></label><input type="text" id="su-name" placeholder="Your full name" autocomplete="name"></div>
+          <div class="form-group">
+            <label>Mobile Number <span class="req">*</span></label>
+            <div class="input-phone-wrap"><span class="phone-code">+91</span><input type="tel" id="su-phone" placeholder="10-digit mobile" maxlength="10" autocomplete="tel"></div>
+          </div>
+          <div class="form-group"><label>Email Address <span class="req">*</span></label><input type="email" id="su-email" placeholder="you@example.com" autocomplete="email"></div>
+          <div class="form-group">
+            <label>Password <span class="req">*</span></label>
+            <div class="input-pass-wrap">
+              <input type="password" id="su-pass" placeholder="Min. 6 characters" autocomplete="new-password">
+              <button class="pass-toggle" onclick="togglePass('su-pass',this)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>I am a <span class="req">*</span></label>
+            <div class="role-select-row" id="su-role-select">
+              <div class="role-pill active" data-role="customer" onclick="selectSuRole(this,'customer')">Customer</div>
+              <div class="role-pill" data-role="shopkeeper" onclick="selectSuRole(this,'shopkeeper')">Shopkeeper</div>
+              <div class="role-pill" data-role="delivery" onclick="selectSuRole(this,'delivery')">Delivery Partner</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Location <span class="req">*</span></label>
+            <div style="display:flex;gap:8px;margin-bottom:8px;">
+              <button class="btn btn-green" style="flex:1;font-size:12px;padding:10px;" id="su-loc-detect-btn" onclick="signupDetectLocation()">&#128204; Detect Location</button>
+              <button class="btn btn-light" style="flex:1;font-size:12px;padding:10px;" onclick="signupManualLocation()">&#9998; Type Manually</button>
+            </div>
+            <div id="su-loc-detected" style="display:none;background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:10px;padding:10px 14px;font-size:12px;font-weight:600;color:#166534;margin-bottom:8px;">
+              &#128204; <span id="su-loc-label">Location detected</span>
+            </div>
+            <div id="su-loc-manual" style="display:none;">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+                <input type="text" id="su-city" placeholder="City" style="padding:10px 12px;border:1.5px solid #e5e7eb;border-radius:10px;font-size:13px;outline:none;font-family:inherit;">
+                <input type="text" id="su-district" placeholder="District" style="padding:10px 12px;border:1.5px solid #e5e7eb;border-radius:10px;font-size:13px;outline:none;font-family:inherit;">
+                <input type="text" id="su-state" placeholder="State" style="padding:10px 12px;border:1.5px solid #e5e7eb;border-radius:10px;font-size:13px;outline:none;font-family:inherit;">
+                <input type="text" id="su-country" placeholder="Country" value="India" style="padding:10px 12px;border:1.5px solid #e5e7eb;border-radius:10px;font-size:13px;outline:none;font-family:inherit;">
+              </div>
+              <input type="text" id="su-pincode" placeholder="Pincode" maxlength="6" style="width:100%;padding:10px 12px;border:1.5px solid #e5e7eb;border-radius:10px;font-size:13px;outline:none;font-family:inherit;box-sizing:border-box;">
+            </div>
+          </div>
+          <button class="btn-auth" id="signup-btn" onclick="signUpWithEmail()">
+            <span>Create Account</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIGNUP SUCCESS -->
+  <div class="screen" id="screen-signup-success">
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:40px 28px;text-align:center;">
+      <div style="font-size:72px;margin-bottom:20px;">&#127881;</div>
+      <h2 style="font-size:26px;font-weight:900;color:white;font-family:var(--font-display,'Baloo 2');margin-bottom:8px;">Account Created!</h2>
+      <p style="font-size:15px;color:rgba(255,255,255,.85);margin-bottom:32px;">Your account has been created successfully. Please login to continue.</p>
+      <button onclick="goSuccessToLogin()" style="background:white;color:#1a5c2a;font-weight:800;font-size:16px;border:none;border-radius:14px;padding:16px 32px;cursor:pointer;width:100%;max-width:300px;font-family:inherit;">
+        Continue to Login &#10132;
+      </button>
+    </div>
+  </div>
+
+  <div id="customer-screens-container"></div>
+  <div id="shopkeeper-screens-container"></div>
+  <div id="driver-screens-container"></div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Global modal (bottom sheet style) -->
+  <div class="modal-overlay" id="global-modal" onclick="closeGlobalModal(event)">
+    <div class="modal-sheet" id="global-modal-content"></div>
+  </div>
+
+  <!-- Add Item Sheet (global, outside screen containers) -->
+  <div class="nb-overlay" id="add-item-overlay" onclick="if(event.target===this)closeAddItemModal()">
+    <div class="nb-sheet">
+      <div class="nb-sheet-handle"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h3 style="font-size:18px;font-weight:800;color:#111827;margin:0;" id="add-item-modal-title">Add Product</h3>
+        <button onclick="closeAddItemModal()" style="background:#f3f4f6;border:none;border-radius:50%;width:32px;height:32px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;">&#10005;</button>
+      </div>
+      <div class="form-group"><label>Product Name <span class="req">*</span></label><input type="text" id="item-name" placeholder="e.g. Amul Full Cream Milk"></div>
+      <div class="form-group"><label>Description</label><input type="text" id="item-desc" placeholder="e.g. 500ml Tetra Pack"></div>
+      <div class="form-group">
+        <label>Category</label>
+        <select id="item-category" style="width:100%;padding:11px 14px;border:1.5px solid #e5e7eb;border-radius:10px;font-size:13px;outline:none;font-family:inherit;background:white;">
+          <option>General</option><option>Grocery</option><option>Food</option><option>Dairy</option>
+          <option>Bakery</option><option>Vegetables</option><option>Medical</option><option>Electronics</option>
+        </select>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="form-group"><label>Price &#8377; <span class="req">*</span></label><input type="number" id="item-price" placeholder="0" min="0"></div>
+        <div class="form-group"><label>MRP &#8377;</label><input type="number" id="item-mrp" placeholder="0" min="0"></div>
+      </div>
+      <div class="form-group"><label>Stock Quantity</label><input type="number" id="item-stock" placeholder="0" min="0"></div>
+      <div class="form-group">
+        <label>Product Image</label>
+        <div id="item-upload-area" onclick="triggerItemImageUpload()" style="border:2px dashed #d1d5db;border-radius:10px;padding:20px;text-align:center;cursor:pointer;color:#9ca3af;background:#f9fafb;">
+          <div style="font-size:28px;margin-bottom:6px;">&#128247;</div>
+          <div style="font-size:12px;font-weight:600;">Tap to upload image</div>
+        </div>
+        <div id="item-img-preview" style="display:none;margin-top:8px;position:relative;">
+          <img id="item-img-preview-src" src="" alt="" style="width:100%;height:140px;object-fit:cover;border-radius:10px;">
+          <button onclick="clearItemImage()" style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,.6);color:white;border:none;border-radius:50%;width:26px;height:26px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;">&#10005;</button>
+        </div>
+        <input type="file" id="item-img-input" accept="image/*" style="display:none;" onchange="handleItemImageUpload(this)">
+        <input type="hidden" id="item-img-url">
+        <input type="hidden" id="edit-item-id">
+      </div>
+      <div style="display:flex;gap:10px;margin-top:4px;">
+        <button class="btn btn-light btn-full" onclick="closeAddItemModal()">Cancel</button>
+        <button class="btn btn-orange btn-full" onclick="saveInventoryItem()">Save Product</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Respond/Quote Sheet (global, outside screen containers) -->
+  <div class="nb-overlay" id="respond-overlay" onclick="if(event.target===this)closeRespondModal()">
+    <div class="nb-sheet">
+      <div class="nb-sheet-handle"></div>
+      <h3 style="font-size:17px;font-weight:800;margin:0 0 6px;">Send Quote</h3>
+      <div style="font-size:12px;color:#6b7280;margin-bottom:14px;" id="respond-customer-info"></div>
+      <div id="respond-items-form"></div>
+      <div class="form-group" style="margin-top:12px;">
+        <label>Estimated Delivery Time (min)</label>
+        <input type="number" id="respond-eta" value="30" min="5" max="120">
+      </div>
+      <div class="form-group">
+        <label>Note (optional)</label>
+        <input type="text" id="respond-note" placeholder="e.g. Stock available, fresh delivery">
+      </div>
+      <div style="display:flex;gap:10px;margin-top:8px;">
+        <button class="btn btn-light btn-full" onclick="closeRespondModal()">Cancel</button>
+        <button class="btn btn-blue btn-full" onclick="sendQuote()">Send Quote</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart Conflict Sheet (global) -->
+  <div class="nb-overlay" id="cart-conflict-overlay" onclick="if(event.target===this)document.getElementById('cart-conflict-overlay').classList.remove('open')">
+    <div class="nb-sheet">
+      <div class="nb-sheet-handle"></div>
+      <div style="text-align:center;padding:0 0 8px;">
+        <div style="font-size:48px;margin-bottom:12px;">&#128722;</div>
+        <div style="font-size:17px;font-weight:800;color:#111827;margin-bottom:8px;">Replace Cart?</div>
+        <div style="font-size:13px;color:#6b7280;margin-bottom:20px;" id="cart-conflict-msg">Adding from a different shop will clear your current cart.</div>
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-light btn-full" onclick="document.getElementById('cart-conflict-overlay').classList.remove('open')">Keep Cart</button>
+          <button class="btn btn-orange btn-full" onclick="confirmCartReplace()">Replace Cart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end app-wrapper -->
+
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+  import {
+    getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
+    GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult,
+    sendPasswordResetEmail, onAuthStateChanged, signOut
+  } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+  import {
+    getFirestore, doc, setDoc, getDoc, collection, query, where,
+    onSnapshot, addDoc, updateDoc, deleteDoc, orderBy, limit, getDocs,
+    serverTimestamp, GeoPoint, arrayUnion
+  } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+  import { getDatabase, ref, set, onValue, push, remove, update }
+    from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBX8ffFnEjarCmLGaCyqCX2IdaNTF3gzts",
+    authDomain: "nearbazaar-d1016.firebaseapp.com",
+    projectId: "nearbazaar-d1016",
+    storageBucket: "nearbazaar-d1016.firebasestorage.app",
+    messagingSenderId: "172022619510",
+    appId: "1:172022619510:web:4321b1f01379e310e2ae57"
+  };
+
+  const app  = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db   = getFirestore(app);
+  const rtdb = getDatabase(app);
+
+  window.FB = {
+    app, auth, db, rtdb,
+    signInWithEmailAndPassword, createUserWithEmailAndPassword,
+    GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult,
+    sendPasswordResetEmail, onAuthStateChanged, signOut,
+    doc, setDoc, getDoc, collection, query, where,
+    onSnapshot, addDoc, updateDoc, deleteDoc, orderBy, limit, getDocs,
+    serverTimestamp, GeoPoint, arrayUnion,
+    ref, set, onValue, push, remove, update
+  };
+
+  // Helper to build user object
+  window._buildUserData = function(uid, name, email, phone, role, photoURL) {
+    var base = { uid, name, email, phone: phone||'', role, address:'', photoURL: photoURL||'', location:null, totalOrders:0, totalSpent:0 };
+    if (role === 'shopkeeper') Object.assign(base, { shopName: name+"'s Shop", shopCategory:'General', shopOpen:false, deliveryRadius:5, minOrder:100, rating:0, reviewCount:0, totalRevenue:0, openingHours:'09:00', closingHours:'21:00' });
+    if (role === 'delivery')   Object.assign(base, { vehicleNumber:'', vehicleType:'Bike', isOnline:false, totalDeliveries:0, totalEarnings:0, rating:0, commissionPercent:10 });
+    return base;
+  };
+
+  // Handle Google redirect (mobile/APK)
+  getRedirectResult(auth).then(async (result) => {
+    if (!result || !result.user) return;
+    const user = result.user;
+    window.currentUser = user;
+    window._isHandlingAuth = true;
+    const snap = await getDoc(doc(db, 'users', user.uid));
+    if (snap.exists()) {
+      window.currentUserData = snap.data();
+      window.currentRole = snap.data().role || 'customer';
+      window._isHandlingAuth = false;
+      if (typeof navigateToRoleDashboard === 'function') navigateToRoleDashboard(window.currentRole);
+    } else {
+      const role = localStorage.getItem('nb_pending_role') || 'customer';
+      const userData = window._buildUserData(user.uid, user.displayName||'User', user.email, '', role, user.photoURL||'');
+      userData.location = (window.NearBazaar && window.NearBazaar.userLocation) || null;
+      await setDoc(doc(db,'users',user.uid), Object.assign({}, userData, { createdAt:serverTimestamp(), updatedAt:serverTimestamp() }), {merge:true});
+      window.currentUserData = userData; window.currentRole = role;
+      window._isHandlingAuth = false;
+      if (typeof navigateToRoleDashboard === 'function') navigateToRoleDashboard(role);
+    }
+  }).catch(() => { window._isHandlingAuth = false; });
+
+  // ─── KEY FIX: Auth observer manages SESSION RESTORE only ───
+  // It does NOT interfere with signup/login flows in auth.js
+  // _authRestoreDone = true means we already handled initial session
+  let _authRestoreDone = false;
+
+  onAuthStateChanged(auth, async (user) => {
+    // Skip if auth.js is actively handling a login/signup operation
+    if (window._isHandlingAuth) return;
+
+    if (_authRestoreDone) return; // Only handle initial session restore
+    _authRestoreDone = true;
+
+    if (user) {
+      // App was reopened with existing session
+      window.currentUser = user;
+      try {
+        const snap = await getDoc(doc(db, 'users', user.uid));
+        if (snap.exists()) {
+          window.currentUserData = snap.data();
+          window.currentRole = snap.data().role || 'customer';
+          if (window._splashDone) {
+            navigateToRoleDashboard(window.currentRole);
+          } else {
+            window._pendingNav = window.currentRole;
+          }
+          return;
+        }
+      } catch(e) {}
+      // User in Auth but no Firestore doc - needs signup
+      if (window._splashDone) {
+        goTo('screen-auth');
+        if (typeof switchAuthTab === 'function') switchAuthTab('signup');
+      } else {
+        window._pendingNav = 'auth-signup';
+      }
+    } else {
+      window.currentUser = null;
+      window.currentUserData = null;
+      window.currentRole = null;
+    }
+  });
+
+  window.fbReady = true;
+  document.dispatchEvent(new Event('fb-ready'));
+</script>
+
+<script src="js/app.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/notifications.js"></script>
+<script src="js/customer.js"></script>
+<script src="js/shopkeeper.js"></script>
+<script src="js/driver.js"></script>
+</body>
+</html>

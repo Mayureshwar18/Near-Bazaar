@@ -1,0 +1,301 @@
+/* ═══════════════════════════════════════════════════════════════
+   NearBazaar — driver.css
+   Delivery Partner panel styles
+═══════════════════════════════════════════════════════════════ */
+
+/* ── DRIVER HEADER ── */
+.drv-header {
+  background: linear-gradient(160deg, var(--blue-dark) 0%, var(--blue) 100%);
+  padding: calc(env(safe-area-inset-top, 0px) + 16px) 20px 20px;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+.drv-header::before {
+  content: '';
+  position: absolute;
+  width: 180px; height: 180px;
+  background: rgba(255,255,255,.05);
+  border-radius: 50%;
+  top: -60px; right: -40px;
+}
+
+.drv-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+.drv-name-row { }
+.drv-greeting { font-size: 11px; color: rgba(255,255,255,.65); font-weight: 600; }
+.drv-name { font-family: var(--font-display); font-size: 20px; font-weight: 800; color: white; }
+
+/* Online Toggle */
+.drv-online-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: var(--trans-fast);
+}
+.drv-online-bar:hover { background: rgba(255,255,255,.18); }
+.drv-online-text { flex: 1; }
+.drv-online-label { font-size: 14px; font-weight: 700; color: white; }
+.drv-online-sub { font-size: 11px; color: rgba(255,255,255,.65); font-weight: 500; }
+.drv-status-badge { padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 800; }
+.drv-status-badge.online { background: rgba(34,197,94,.3); color: #86efac; }
+.drv-status-badge.offline { background: rgba(0,0,0,.3); color: rgba(255,255,255,.6); }
+
+/* ── DRIVER STATS ── */
+.drv-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding: 16px 20px;
+}
+.drv-stat {
+  background: white;
+  border: 1.5px solid var(--gray-100);
+  border-radius: var(--radius-sm);
+  padding: 14px 10px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+.drv-stat-val {
+  font-size: 20px;
+  font-weight: 900;
+  font-family: var(--font-display);
+  color: var(--gray-900);
+}
+.drv-stat-val.blue   { color: var(--blue-dark); }
+.drv-stat-val.green  { color: var(--green-dark); }
+.drv-stat-val.amber  { color: var(--amber-dark); }
+.drv-stat-lbl { font-size: 9px; font-weight: 700; color: var(--gray-400); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.4px; }
+
+/* ── NEW ORDER CARD (Driver) ── */
+.drv-order-card {
+  background: white;
+  border: 2px solid var(--blue);
+  border-radius: var(--radius);
+  margin: 0 20px 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(37,99,235,.15);
+  animation: bounce-in 0.4s ease;
+}
+.drv-order-pulse {
+  animation: pulse-border 2s infinite;
+}
+@keyframes pulse-border {
+  0%, 100% { border-color: var(--blue); box-shadow: 0 4px 16px rgba(37,99,235,.15); }
+  50% { border-color: var(--blue-dark); box-shadow: 0 6px 22px rgba(37,99,235,.3); }
+}
+
+.drv-order-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: var(--blue-light);
+  border-bottom: 1px solid #bfdbfe;
+}
+.drv-order-id { font-size: 13px; font-weight: 800; color: var(--blue-dark); }
+.drv-order-dist {
+  margin-left: auto;
+  background: white;
+  border: 1px solid var(--blue);
+  border-radius: 12px;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--blue-dark);
+}
+.drv-order-body { padding: 14px 16px; }
+
+.drv-route {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 14px;
+}
+.drv-route-item { display: flex; align-items: flex-start; gap: 10px; }
+.drv-route-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+.drv-route-dot.pickup { background: var(--orange); }
+.drv-route-dot.drop { background: var(--green); }
+.drv-route-line {
+  width: 2px; height: 16px;
+  background: var(--gray-200);
+  margin-left: 4px;
+  border-radius: 1px;
+}
+.drv-route-label { font-size: 10px; font-weight: 700; color: var(--gray-400); text-transform: uppercase; }
+.drv-route-addr { font-size: 13px; font-weight: 600; color: var(--gray-800); }
+
+.drv-order-meta {
+  display: flex;
+  gap: 16px;
+  padding: 10px 0 0;
+  border-top: 1px solid var(--gray-50);
+}
+.drv-meta-item { display: flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; color: var(--gray-600); }
+.drv-meta-item svg { color: var(--blue); }
+
+.drv-order-earn {
+  margin-left: auto;
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--green-dark);
+  font-family: var(--font-display);
+}
+
+.drv-order-actions {
+  display: flex;
+  gap: 10px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--gray-100);
+}
+
+/* ── ACTIVE DELIVERY ── */
+.drv-active-card {
+  background: var(--blue-light);
+  border: 1.5px solid var(--blue);
+  border-radius: var(--radius);
+  margin: 0 20px 12px;
+  overflow: hidden;
+}
+.drv-active-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: var(--blue);
+  color: white;
+}
+.drv-active-title { font-size: 14px; font-weight: 800; }
+.drv-active-body { padding: 14px 16px; }
+
+/* ── NAVIGATION CARD (mini map) ── */
+.drv-nav-card {
+  background: white;
+  border: 1.5px solid var(--gray-100);
+  border-radius: var(--radius);
+  margin: 0 20px 12px;
+  overflow: hidden;
+}
+.drv-map-area { height: 140px; position: relative; background: linear-gradient(145deg, #c8e6c9, #b2dfdb); overflow: hidden; }
+
+/* ── EARNINGS ── */
+.earnings-hero {
+  background: linear-gradient(160deg, var(--green-deep), var(--green-dark));
+  padding: calc(env(safe-area-inset-top, 0px) + 20px) 20px 28px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.earnings-label { font-size: 11px; color: rgba(255,255,255,.65); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+.earnings-amount {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 900;
+  color: white;
+  line-height: 1;
+  margin: 8px 0;
+}
+.earnings-amount .currency-sym { font-size: 24px; vertical-align: top; margin-top: 12px; display: inline-block; }
+.earnings-period { font-size: 12px; color: rgba(255,255,255,.65); font-weight: 600; }
+
+.earnings-breakdown {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding: 16px 20px;
+}
+.earn-card {
+  background: white;
+  border: 1.5px solid var(--gray-100);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  box-shadow: var(--shadow-sm);
+}
+.earn-card-icon { font-size: 20px; margin-bottom: 8px; }
+.earn-card-val { font-size: 20px; font-weight: 900; color: var(--gray-900); font-family: var(--font-display); }
+.earn-card-label { font-size: 11px; color: var(--gray-400); font-weight: 600; margin-top: 2px; }
+
+/* ── PAYOUT ── */
+.payout-card {
+  background: linear-gradient(135deg, var(--green-dark), var(--green));
+  border-radius: var(--radius);
+  margin: 0 20px 16px;
+  padding: 20px;
+  color: white;
+  box-shadow: var(--shadow-green);
+}
+.payout-balance { font-size: 11px; color: rgba(255,255,255,.7); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.payout-amount { font-family: var(--font-display); font-size: 36px; font-weight: 900; color: white; margin: 4px 0; }
+.payout-withdraw-btn {
+  background: white;
+  color: var(--green-dark);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 16px;
+  width: 100%;
+  font-family: var(--font-body);
+  transition: var(--trans-fast);
+}
+.payout-withdraw-btn:hover { background: var(--green-pale); }
+
+/* ── VEHICLE CARD ── */
+.vehicle-card {
+  background: white;
+  border: 1.5px solid var(--gray-100);
+  border-radius: var(--radius);
+  margin: 0 20px 12px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: var(--shadow-sm);
+}
+.vehicle-icon { font-size: 36px; }
+.vehicle-info { flex: 1; }
+.vehicle-number { font-size: 16px; font-weight: 800; color: var(--gray-900); letter-spacing: 1px; }
+.vehicle-type { font-size: 12px; color: var(--gray-500); font-weight: 600; margin-top: 2px; }
+.vehicle-verified { display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; color: var(--green-dark); margin-top: 6px; }
+
+/* ── DELIVERY HISTORY ── */
+.drv-hist-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--gray-50);
+}
+.drv-hist-icon {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--blue-light);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+  color: var(--blue-dark);
+}
+.drv-hist-info { flex: 1; }
+.drv-hist-order { font-size: 13px; font-weight: 700; color: var(--gray-900); }
+.drv-hist-meta { font-size: 11px; color: var(--gray-500); font-weight: 500; margin-top: 2px; }
+.drv-hist-right { text-align: right; }
+.drv-hist-earn { font-size: 15px; font-weight: 900; color: var(--green-dark); font-family: var(--font-display); }
+.drv-hist-time { font-size: 10px; color: var(--gray-400); font-weight: 500; margin-top: 2px; }
